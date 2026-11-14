@@ -11,7 +11,8 @@ lint:
 	verilator --lint-only -Wall --top-module aes_sbox rtl/aes_sbox.v
 	verilator --lint-only -Wall --top-module aes_shiftrows rtl/aes_shiftrows.v
 	verilator --lint-only -Wall --top-module aes_mixcolumns rtl/aes_mixcolumns.v
-		verilator --lint-only -Wall --top-module aes_round rtl/aes_sbox.v rtl/aes_subbytes.v rtl/aes_shiftrows.v rtl/aes_mixcolumns.v rtl/aes_round.v
+	verilator --lint-only -Wall --top-module aes_round rtl/aes_sbox.v rtl/aes_subbytes.v rtl/aes_shiftrows.v rtl/aes_mixcolumns.v rtl/aes_round.v
+	verilator --lint-only -Wall --top-module aes_key_step rtl/aes_sbox.v rtl/aes_key_step.v
 
 clean:
 	rm -f *.vvp *.vcd sbox.hex
@@ -23,3 +24,7 @@ sim_round: rtl/aes_shiftrows.v rtl/aes_mixcolumns.v tb/tb_aes_round_parts.v
 sim_aesround: sbox tb/tb_aes_round.v
 	iverilog -g2012 -o aesround.vvp rtl/aes_sbox.v rtl/aes_subbytes.v rtl/aes_shiftrows.v rtl/aes_mixcolumns.v rtl/aes_round.v tb/tb_aes_round.v
 	vvp aesround.vvp
+
+sim_keyexp: sbox tb/tb_aes_keyexp.v
+	iverilog -g2012 -o keyexp.vvp rtl/aes_sbox.v rtl/aes_key_step.v tb/tb_aes_keyexp.v
+	vvp keyexp.vvp
