@@ -9,6 +9,12 @@ sim_sbox: sbox tb/tb_aes_sbox.v
 
 lint:
 	verilator --lint-only -Wall --top-module aes_sbox rtl/aes_sbox.v
+	verilator --lint-only -Wall --top-module aes_shiftrows rtl/aes_shiftrows.v
+	verilator --lint-only -Wall --top-module aes_mixcolumns rtl/aes_mixcolumns.v
 
 clean:
 	rm -f *.vvp *.vcd sbox.hex
+
+sim_round: rtl/aes_shiftrows.v rtl/aes_mixcolumns.v tb/tb_aes_round_parts.v
+	iverilog -g2012 -o round.vvp rtl/aes_shiftrows.v rtl/aes_mixcolumns.v tb/tb_aes_round_parts.v
+	vvp round.vvp
